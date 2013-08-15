@@ -173,7 +173,7 @@ angularLocalStorage.service('localStorageService', [
   // Typically used as a fallback is local storage is not available in the browser
   // Example use: localStorageService.cookie.add('library','angular');
   var addToCookies = function (key, value) {
-    console.log(key + " / " + value);
+
     if (typeof value == "undefined") return false;
 
     if (!browserSupportsCookies()) {
