@@ -173,7 +173,7 @@ angularLocalStorage.service('localStorageService', [
   // Typically used as a fallback is local storage is not available in the browser
   // Example use: localStorageService.cookie.add('library','angular');
   var addToCookies = function (key, value) {
-
+    console.log(key + " / " + value);
     if (typeof value == "undefined") return false;
 
     if (!browserSupportsCookies()) {
@@ -183,14 +183,17 @@ angularLocalStorage.service('localStorageService', [
 
     try {
       var expiry = '', expiryDate = new Date();
-      if (value === null) {
-        cookie.expiry = -1;
-        value = '';
+
+      var makeExpiry = function(value){
+          var expiry_counter = 0;
+          if(value === null) expiry_counter = -1;
+          else expiry_counter = cookie.expiry;
+          expiryDate.setTime(expiryDate.getTime() + (expiry_counter*24*60*60*1000));
+          expiry = "; expires="+expiryDate.toGMTString();
       }
-      if (cookie.expiry !== 0) {
-        expiryDate.setTime(expiryDate.getTime() + (cookie.expiry*24*60*60*1000));
-        expiry = "; expires="+expiryDate.toGMTString();
-      }
+
+      if (value === null) value = '';
+      makeExpiry(value);
       if (!!key) {
         document.cookie = prefix + key + "=" + encodeURIComponent(value) + expiry + "; path="+cookie.path;
       }
